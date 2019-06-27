@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>{% block tittle %}GarOGnomes{% endblock %}</title>
+        <meta charset="utf-8" />
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('profil/css/styles.css') }}"/>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="apple-touch-icon" href="{{ asset('gestion/images/logo2.png') }}" />
+        <link rel="shortcut icon" href="{{ asset('gestion/images/logo2.png') }}" />
+    </head>
+
+    <body>
+
+    {% if app.user %}
+    <h1 style="font-size: 70px">Bienvenue {{ app.user.pseudo }}</h1>
+    {% else %}
+    <h1>Bienvenue à toi !</h1>
+    {% endif %}
+
+    <div class="menu">
+        <div class="gauche">
+            <img data-toggle="modal" data-target="#profil" class="icon gauchea" src="{{ asset('profil/images/profil.png') }}" alt="profil">
+            <a href="#"><img class="icon gaucheb" src="{{ asset('profil/images/stats.png') }}" alt="ajouter_amis"></a>
+        </div>
+        <div class="centre">
+            <a href="{{ path('new_game')}}"><img class="jouer" src="{{ asset('profil/images/bouton_jouer.png') }}" alt="jouer"></a>
+        </div>
+        <div class="droite">
+            <a href="#"><img class="icon droitea" src="{{ asset('profil/images/amis.png') }}" alt="amis"></a>
+            <a href="#"><img src="{{ asset('profil/images/ajout.png') }}" alt="stats" class="icon droiteb"></a>
+            <a href="{{ path('logout') }}"><img class="icon droitec" src="{{ asset('profil/images/deconnexion.png') }}" alt="deconnexion"></a>
+        </div>
+    </div>
+
+    <!-- Modal Profil -->
+
+    <div class="modal fade" id="profil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content popup" style="width: 70vh">
+                <div class="modal-header" style="margin-top: 3vh;">
+                    <h3 class="modal-title" id="exampleModalLabel">Profil</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="margin-top: 5vh;">
+
+                    <p class="pres">
+                        Nom : {{ app.user.nom }} <br><br>
+                        Prénom : {{ app.user.prenom }} <br><br>
+                        E-mail : {{ app.user.email }} <br><br>
+                        Pseudo : {{ app.user.pseudo }} <br><br>
+                        Date d'inscription: {{app.user.dateinscription|date("d/m/Y")}} <br><br>
+                        Date de dernière connexion: {{app.user.derniereco|date("d/m/Y")}}
+
+
+                    </p>
+
+                    <a class="centre" href="#">Changer de mot de passe</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Statistique -->
+
+    <!-- Modal Amis -->
+
+    <!-- Modal Ajouter Amis -->
+    {% block body %}{% endblock %}
+
+    {% block javascripts %}
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% endblock %}
+    </body>
+</html>
+

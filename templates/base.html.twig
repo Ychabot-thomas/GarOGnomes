@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>{% block tittle %}GarOGnomes{% endblock %}</title>
+        <meta charset="utf-8" />
+        {% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ asset('accueil/css/styles.css') }}"/>{% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="apple-touch-icon" href="{{ asset('gestion/images/logo2.png') }}" />
+        <link rel="shortcut icon" href="{{ asset('gestion/images/logo2.png') }}" />
+    </head>
+
+    <body>
+
+    <header>
+        <div class="boutton-joueur">
+            <a href="{{ path('app_register') }}"><img class="menu-joueur" src="{{ asset('accueil/images/nouveau_joueur_nuage.png') }}" alt="inscription"></a>
+            <a href="{{ path('app_login') }}"><img class="menu-joueur" src="{{ asset('accueil/images/deja_membre_nuage.png') }}" alt="connexion"></a>
+        </div>
+
+        <img class="logo" src="{{ asset('accueil/images/logo.png') }}" alt="logo_jeu">
+
+        <div class="centre">
+            <p class="titre-haut">Une guerre se prépare dans le petit village de Dwarf...</p>
+            <p class="presentation">
+                <br>
+                Cette guerre scèlera le destin des deux clans de nains de jardins rivaux : <br><br>
+                le clan Gomgom dirigé par Grobide et le clan Trotrogro dirigé par Sourcilfumants.  <br><br>
+                C'est à vous de choisir votre victoire :<br><br>
+                décimer le clan adverse ou récupérer l'otage. <br><br>
+            </p>
+            <p class="titre-bas">Le destin de ces nains est entre vos mains!<br><br></p>
+        </div>
+        <img class="barriere" src="{{ asset('accueil/images/cloture.png') }}" alt="barrière">
+    </header>
+
+    <div class="promotion">
+        <div class="video">
+            <iframe class="iframe" width="889" height="500" src="https://www.youtube-nocookie.com/embed/xo8MDTpZGdg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        </div>
+    </div>
+
+
+    {% block body %}{% endblock %}
+
+    {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,348 @@
+{% extends 'jeux.html.twig' %}
+{% block stylesheets %}
+    <style>
+        .terrain {
+            float: left;
+            width: 100px;
+            margin: 5px;
+            border-radius: 5px;
+            height: 100px;
+        }
+
+        .pile {
+            float: left;
+            width: 100px;
+            margin: 5px;
+        }
+
+        .de.beige {
+            background-color: #d3b998;
+        }
+
+        .de.green {
+            background-color: #30e530;
+        }
+
+        .de.red {
+            background-color: #ff2e2e;
+        }
+
+        .de{
+            margin-top: 2%;
+        }
+
+        .carte {
+            height: 150px;
+            width: 100px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-top: -100px;
+        }
+
+        .carte2 {
+            height: 150px;
+            width: 100px;
+            border-radius: 5px;
+            margin-bottom: -100px;
+        }
+
+        .carte2 span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .carte span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        #moncote {
+            clear: both;
+            position: relative;
+            top: 40%;
+        }
+
+        #adversaire {
+            position: relative;
+            top : -18%
+        }
+
+        .adversairepile {
+            width: 100px;
+            margin: 3px;
+            display: inline-block;
+            vertical-align: bottom;
+            transform: rotate(180deg);
+        }
+
+        .joue {
+            border: 3px darkgray solid;
+            opacity: 0.5;
+        }
+
+        .des{
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+
+        .rond{
+            border: 0;
+            border-radius: 50%;
+            padding: 20px;
+            margin-left: 2%;
+            width: 80px;
+            height: 80px;
+        }
+
+        .rond:hover{
+            opacity: 0.8;
+        }
+
+        .descontainer{
+            margin-top: -30%;
+        }
+
+        .plateau{
+            height: 151px;
+        }
+
+        .imgcarte{
+            height: 150px;
+            width: 100px;
+        }
+
+        div#actions{
+            color: whitesmoke;
+        }
+
+    </style>
+{% endblock %}
+{% block body %}
+
+     <div class="mt-2 ml-2" >
+        <h5 style="color: whitesmoke">Liste de vos actions : </h5>
+        <div id="actions" style="position: absolute">
+
+        </div>
+    </div>
+
+    {#Terrain#}
+    <div>
+        <h1 class="d-flex justify-content-center" style="margin-top: -30px;"><div style="margin-right: 2%;color: #f4ba4f;">{{ partie.j1_partie.pseudo }}</div> <div style="font-size: 50px; margin-right: 2%; color: whitesmoke;"> VS </div> <div style="color: #f4ba4f">{{ partie.j2_partie.pseudo }}</div></h1>
+        <div class="d-flex justify-content-center">
+            <div id="partie">
+               {{ include('jeu/plateau.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+    {#Des#}
+    <div class="descontainer">
+        <div id="des">
+            <div class="des">
+                <button id="de1" class="de beige rond" data-couleur="1" style="font-weight: bold"></button>
+                <button id="de2" class="de red rond" data-couleur="2" style="font-weight: bold"></button>
+                <button id="de3" class="de green rond" data-couleur="3" style="font-weight: bold"></button>
+                <button id="fintour" class="de btn-warning rond">Fin</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+     <script>
+            // Temps d'apparition des dès
+            $('#de1,#de2,#de3').hide();
+            setTimeout(function(){
+                $('#de1,#de2,#de3').show();
+            }, 3000);
+
+            var tourTampon = 0;
+            $(document).ready(function () {
+                $.ajax({
+                    url: "{{ path('which_turn', {partie:partie.id}) }}",
+                    method: 'GET',
+                    data: {},
+                    success: function (response) {
+                        tourTampon = response.tour;
+                        if(response.montour === false){
+                            $('#des').hide();
+                        }
+                    }
+                })
+            });
+
+            var moveTampon = 0;
+            $(document).ready(function () {
+                $.ajax({
+                    url: "{{ path('which_move', {partie:partie.id}) }}",
+                    method: 'POST',
+                    data: {},
+                    success: function (response) {
+                        moveTampon = response;
+                    }
+                })
+            });
+
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * Math.floor(max)+1);
+            }
+
+            var valeur = 0;
+            var de;
+            var aumoinsunde = false;
+            $('.deplacement').hide();
+            $('#de1').empty().text(getRandomInt(3));
+            $('#de2').empty().text(getRandomInt(3));
+            $('#de3').empty().text(getRandomInt(3));
+            $(this).attr("disabled", "disabled").addClass('btn-defaut').removeClass('btn-primary');
+
+            $(document).on('click', '#de1', function(){
+                $('#actions').empty().append();
+                $('.deplacement').hide();
+                $('.deplacement.blue').show();
+                valeur = $(this).text();
+                de = $(this);
+            });
+
+            $(document).on('click', '#de2', function(){
+                $('#actions').empty().append();
+                $('.deplacement').hide();
+                $('.deplacement.red').show();
+                valeur = $(this).text();
+                de = $(this);
+            });
+
+            $(document).on('click', '#de3', function(){
+                $('#actions').empty().append();
+                $('.deplacement').hide();
+                $('.deplacement.green').show();
+                valeur = $(this).text();
+                de = $(this);
+            });
+
+            $(document).on('click', '.deplacement', function(){
+                if ($(this).data('nb-cartes') - $(this).data('position') > 2) {
+                    $('#actions').append('<strong style="color:red">Déplacement interdit. 3 cartes maximum.</strong>');
+                } else {
+                    $.ajax({
+                        url: "{{ path('deplacement_game', {partie:partie.id}) }}",
+                        datatype: 'json',
+                        method: 'POST',
+                        data: {
+                            id: $(this).data('id'),
+                            pile: $(this).data('pile'),
+                            position: $(this).data('position'),
+                            valeur: valeur,
+                        },
+                        success: function (data1) {
+                            aumoinsunde = true;
+                            $('#fintour').show();
+                            de.attr("disabled", "disabled").addClass('joue');
+                            $('#partie').empty().load("{{ path('refresh_game', {partie:partie.id}) }}");
+                            if (data1.etat !== "conflit") {
+                                console.log('ok');
+                            } else {
+                                console.log(data1.etat);
+                                var idCombattantJoueur = data1.idCombattantJoueur;
+                                var idCombattantAdv =  data1.idCombattantAdv;
+                                var pileDestination = data1.pileDestination;
+                                var pileDestinationAdv =  data1.pileDestinationAdv;
+                                var taillePile1 = data1.taillePile1;
+                                var taillePile2 = data1.taillePile2;
+                                function resolvConflit(){
+                                    $.ajax({
+                                        url: "{{ path('resolve_conflict_game', {partie:partie.id}) }}",
+                                        method: 'POST',
+                                        data: {
+                                            idCombattantJoueur: idCombattantJoueur,
+                                            idCombattantAdv: idCombattantAdv,
+                                            pileDestination: pileDestination,
+                                            pileDestinationAdv: pileDestinationAdv,
+                                            taillePile1: taillePile1,
+                                            taillePile2: taillePile2,
+                                        },
+                                        success: function (response2) {
+                                            taillePile1 = response2.taillePile1;
+                                            taillePile2 = response2.taillePile2;
+                                            idCombattantJoueur2 = response2.idCombattantJoueur2;
+                                            idCombattantAdv2 = response2.idCombattantAdv2;
+                                            console.log('ID JOUEUR : '+response2.idCombattantJoueur2);
+                                            console.log('ID ADV: '+response2.idCombattantAdv2);
+                                            console.log('PILE 1 : '+response2.taillePile1);
+                                            console.log('PILE 2 : '+response2.taillePile2);
+                                            $('#partie').empty().load("{{ path('refresh_game', {partie:partie.id}) }}");
+                                            if(taillePile1 > 0 && taillePile2 > 0){
+                                                resolvConflit();
+                                            }
+                                        }
+                                    });
+                                }
+                                resolvConflit();
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(document).on('click', '#fintour', function () {
+                $.ajax({
+                    url: "{{ path('change_turn', {partie:partie.id}) }}",
+                    method: 'GET',
+                    data: {},
+                    success: function () {
+                        console.log('change_turn');
+                    }
+                })
+            });
+
+            $(document).on('click', '#fintour', function () {
+                $.ajax({
+                    url: "{{ path('which_turn', {partie:partie.id}) }}",
+                    method: 'GET',
+                    data: {},
+                    success: function (response) {
+                        if (response.tour !== tourTampon) {
+                            tourTampon = response.tour;
+                            $('#partie').empty().load("{{ path('refresh_game', {partie:partie.id}) }}");
+                            location.reload();
+                        }
+                    }
+                })
+            });
+
+            $(document).on('click', '.deplacement', function () {
+                $.ajax({
+                    url: "{{ path('change_move', {partie:partie.id}) }}",
+                    method: 'POST',
+                    data: {},
+                    success: function () {
+                        console.log('déplacement');
+
+                    }
+                })
+            });
+            $(document).on('click', '#fintour', function () {
+                $.ajax({
+                    url: "{{ path('which_move', {partie:partie.id}) }}",
+                    method: 'GET',
+                    data: {},
+                    success: function (response) {
+                        if (response !== moveTampon) {
+                            moveTampon = response;
+                            $('#partie').empty().load("{{ path('refresh_game', {partie:partie.id}) }}");
+                        }
+                    }
+                })
+            });
+
+        </script>
+{% endblock %}
+
+
+{% block title %}
+     GarOGnomes | Partie
+{% endblock %}
+

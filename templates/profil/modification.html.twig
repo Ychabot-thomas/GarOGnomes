@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garognomes | Modification{% endblock %}
+
+
+{% block body %}
+    <img src="{{ asset('assets/image/header1.3.webp') }}" alt="header" class="header_image">
+    <body class="marbre">
+        <div class="container mt-auto">
+            <h1 class="display-4 d-flex justify-content-center mt-4">Modification du profil</h1>
+            <div class="jumbotron">
+                <div class="container mt-4">
+                    {#Formulaire de modification des données de l'utilisateur#}
+                    {{ form(form) }}
+                    <a href="{{ path('profil') }}" class="btn btn-danger">Fermer</a>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+{% endblock %}

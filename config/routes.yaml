@@ -1,0 +1,65 @@
+index:
+  path: /
+  controller: App\Controller\HomeController::index
+
+logout:
+  path: /logout
+
+creer-partie:
+  path: /jeu/creer-partie
+  controller: App\Controller\JeuController::creerPartie
+
+profilindex:
+  path: /profilindex
+  controller: App\Controller\ProfilController::index
+
+gestionindex:
+  path: /gestionindex
+  controller: App\Controller\GestionController::gestion
+
+connexion:
+  path: /connexion
+  controller: App\Controller\GestionController::connexion
+
+ajout_utilisateur:
+  path: /gestion/ajout_utilisateur
+  controller: App\Controller\GestionController::ajout_utilisateur
+
+gestion_partie:
+  path: /gestion/gestion_partie
+  controller: App\Controller\GestionController::gestion_partie
+
+gestion_utilisateur:
+  path: /gestion/gestion_utilisateur
+  controller: App\Controller\GestionController::gestion_utilisateur
+
+mail_communaute:
+  path: /gestion/mail_communaute
+  controller: App\Controller\GestionController::mail_communaute
+
+mail_joueur:
+  path: /gestion/mail_joueur
+  controller: App\Controller\GestionController::mail_joueur
+
+statistique_joueur:
+  path: /gestion/statistique_joueur
+  controller: App\Controller\GestionController::statistique_joueur
+
+statistique_partie:
+  path: /gestion/statistique_partie
+  controller: App\Controller\GestionController::statistique_partie
+
+supprimer_partie:
+  path: /gestion/supprimer_partie
+  controller: App\Controller\GestionController::supprimer_partie
+
+supprimer_utilisateur:
+  path: /gestion/supprimer_utilisateur
+  controller: App\Controller\GestionController::supprimer_utilisateur
+
+statistique:
+  path: /jeux/profil
+  controller: App\Controller\GameController::profil
+
+captcha_routing:
+  resource: "@CaptchaBundle/Resources/config/routing.yml"
