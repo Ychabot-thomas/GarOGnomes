@@ -1,4 +1,4 @@
-Projet S4
+Projet S4 IUT MMI
 
 Développeur Back-End et Front-End
 
