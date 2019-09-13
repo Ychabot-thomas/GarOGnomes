@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: yannchabot-thomas
  * Date: 16/03/2019
  * Time: 14:39
  */
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -25,8 +27,6 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
         $user->setDateinscription(new \datetime);
-        $user->setDerniereco(new \datetime);
-        $user->setBloquer(false);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 

@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>{% block tittle %}GarOGnomes{% endblock %}</title>
+        <title>{% block tittle %}Gobelins{% endblock %}</title>
         <meta charset="utf-8" />
         {% block stylesheets %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('profil/css/styles.css') }}"/>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {% endblock %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" href="{{ asset('gestion/images/logo2.png') }}" />
         <link rel="shortcut icon" href="{{ asset('gestion/images/logo2.png') }}" />
     </head>
 
-    <body>
+    <body style="margin-top:5%;margin-left:5%">
 
     {% if app.user %}
     <h1 style="font-size: 70px">Bienvenue {{ app.user.pseudo }}</h1>
+    Nom : {{ app.user.nom }}&nbsp;&nbsp; / &nbsp;&nbsp;
+    Prénom : {{ app.user.prenom }}&nbsp;&nbsp; / &nbsp;&nbsp;
+    E-mail : {{ app.user.email }}&nbsp;&nbsp; / &nbsp;&nbsp;
+    Date d'inscription: {{app.user.dateinscription|date("d/m/Y")}}<br><br>
     {% else %}
     <h1>Bienvenue à toi !</h1>
     {% endif %}
-
-    <div class="menu">
-        <div class="gauche">
-            <img data-toggle="modal" data-target="#profil" class="icon gauchea" src="{{ asset('profil/images/profil.png') }}" alt="profil">
-            <a href="#"><img class="icon gaucheb" src="{{ asset('profil/images/stats.png') }}" alt="ajouter_amis"></a>
-        </div>
-        <div class="centre">
-            <a href="{{ path('new_game')}}"><img class="jouer" src="{{ asset('profil/images/bouton_jouer.png') }}" alt="jouer"></a>
-        </div>
-        <div class="droite">
-            <a href="#"><img class="icon droitea" src="{{ asset('profil/images/amis.png') }}" alt="amis"></a>
-            <a href="#"><img src="{{ asset('profil/images/ajout.png') }}" alt="stats" class="icon droiteb"></a>
-            <a href="{{ path('logout') }}"><img class="icon droitec" src="{{ asset('profil/images/deconnexion.png') }}" alt="deconnexion"></a>
-        </div>
-    </div>
-
-    <!-- Modal Profil -->
-
-    <div class="modal fade" id="profil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content popup" style="width: 70vh">
-                <div class="modal-header" style="margin-top: 3vh;">
-                    <h3 class="modal-title" id="exampleModalLabel">Profil</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="margin-top: 5vh;">
-
-                    <p class="pres">
-                        Nom : {{ app.user.nom }} <br><br>
-                        Prénom : {{ app.user.prenom }} <br><br>
-                        E-mail : {{ app.user.email }} <br><br>
-                        Pseudo : {{ app.user.pseudo }} <br><br>
-                        Date d'inscription: {{app.user.dateinscription|date("d/m/Y")}} <br><br>
-                        Date de dernière connexion: {{app.user.derniereco|date("d/m/Y")}}
-
-
-                    </p>
-
-                    <a class="centre" href="#">Changer de mot de passe</a>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Statistique -->
-
-    <!-- Modal Amis -->
-
-    <!-- Modal Ajouter Amis -->
+    <a href="{{ path('logout') }}">Deconnexion</a><br><br>
     {% block body %}{% endblock %}
+
+    <div class="gifnews" style="display: flex;justify-content: space-around;text-align: center;">
+
+        <div class="gauche">
+
+            <h1>Create and View your Gif</h1>
+<br><br>
+            <div class="create_gif">
+                {{ form_start(gifForm) }}
+
+                    {{ form_row(gifForm.gif) }} <br>
+                    {{ form_row(gifForm.author) }} <br>
+                    {{ form_row(gifForm.description) }} <br>
+                    {{ form_row(gifForm.submit) }}
+                    
+                {{ form_end(gifForm) }}
+            </div>
+
+            <div class="viewgif">
+
+            </div>
+
+        </div>
+
+        <div class="droite">
+
+            <h1>Create and View your News</h1>
+<br><br>
+            <div class="createnews">
+                {{ form_start(newsForm) }}
+
+                    {{ form_row(newsForm.title) }} <br>
+                    {{ form_row(newsForm.content) }} <br>
+                    {{ form_row(newsForm.submit) }}
+                    
+                {{ form_end(newsForm) }}
+            </div>
+
+            <div class="viewnews">
+
+            </div>
+        
+        </div>
+
+    </div>
 
     {% block javascripts %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

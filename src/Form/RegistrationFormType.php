@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Captcha\Bundle\CaptchaBundle\Form\Type\CaptchaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
@@ -42,11 +41,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-            ->add('captchaCode', CaptchaType::class, array(
-                'captchaConfig' => 'ContactCaptcha',
-                'label' => 'Valider le captcha'
-            ));
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

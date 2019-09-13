@@ -1,6 +1,7 @@
 easy_admin:
   entities:
     # List the entity class name you want to manage
-    - App\Entity\Partie
-    - App\Entity\Carte
     - App\Entity\User
+    - App\Entity\News
+    - App\Entity\Gif
+    - App\Entity\Album

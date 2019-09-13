@@ -1,46 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>{% block tittle %}GarOGnomes{% endblock %}</title>
+        <title>{% block tittle %}Gobelins{% endblock %}</title>
         <meta charset="utf-8" />
-        {% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ asset('accueil/css/styles.css') }}"/>{% endblock %}
+        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="apple-touch-icon" href="{{ asset('gestion/images/logo2.png') }}" />
-        <link rel="shortcut icon" href="{{ asset('gestion/images/logo2.png') }}" />
+        <link rel="apple-touch-icon" href="{{ asset('accueil/images/logo2.png') }}" />
+        <link rel="shortcut icon" href="{{ asset('accueil/images/logo2.png') }}" />
+        <link href="{{ asset('accueil/css/style.css') }}"/>
     </head>
 
     <body>
 
     <header>
-        <div class="boutton-joueur">
-            <a href="{{ path('app_register') }}"><img class="menu-joueur" src="{{ asset('accueil/images/nouveau_joueur_nuage.png') }}" alt="inscription"></a>
-            <a href="{{ path('app_login') }}"><img class="menu-joueur" src="{{ asset('accueil/images/deja_membre_nuage.png') }}" alt="connexion"></a>
-        </div>
-
-        <img class="logo" src="{{ asset('accueil/images/logo.png') }}" alt="logo_jeu">
-
-        <div class="centre">
-            <p class="titre-haut">Une guerre se prépare dans le petit village de Dwarf...</p>
-            <p class="presentation">
-                <br>
-                Cette guerre scèlera le destin des deux clans de nains de jardins rivaux : <br><br>
-                le clan Gomgom dirigé par Grobide et le clan Trotrogro dirigé par Sourcilfumants.  <br><br>
-                C'est à vous de choisir votre victoire :<br><br>
-                décimer le clan adverse ou récupérer l'otage. <br><br>
-            </p>
-            <p class="titre-bas">Le destin de ces nains est entre vos mains!<br><br></p>
-        </div>
-        <img class="barriere" src="{{ asset('accueil/images/cloture.png') }}" alt="barrière">
+        <nav class="navbar navbar-ligth bg-ligth">
+            <form class="form form-inline" style="width:100%;display:flex; justify-content:space-around;">
+                <button class="btn btn-sm btn-outline-secondary" type="button"><a href="{{ path('app_register') }}">Inscription</a></button>
+                <button class="btn btn-sm btn-outline-secondary" type="button"><a href="{{ path('app_login') }}">Connexion</a></button>
+                <img style="width:10%" class="logo" src="{{ asset('accueil/images/logo.png') }}" alt="logo_ecole">
+            </form>
+        </nav>
     </header>
-
-    <div class="promotion">
-        <div class="video">
-            <iframe class="iframe" width="889" height="500" src="https://www.youtube-nocookie.com/embed/xo8MDTpZGdg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        </div>
-    </div>
-
 
     {% block body %}{% endblock %}
 
+    <div class="news">
+        <h1 style="text-align:center">Retrouver ici les dernières News :</h1>
+        {% for new in news %}
+            <div style="display:flex;justify-content:space-around">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ new.title }}</h5>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ new.content }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            {# <p>{{ new.author }}</p> #}
+                            <h6>{{ new.datecreation|date('d/m/Y') }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# <div class="album">
+        <h1 style="text-align:center">Retrouver ici l'album de GIF :</h1>
+        {% for album in albums %}
+
+        {% endfor %}
+    </div> #}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     {% block javascripts %}{% endblock %}
     </body>
 </html>

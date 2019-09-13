@@ -47,24 +47,6 @@ class User implements UserInterface
      */
     private $dateinscription;
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $derniereco;
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $bloquer;
-    /**
-     * @ORM\Column(type="string")
-     * @CaptchaAssert\ValidCaptcha(message = "CAPTCHA invalide, réessayer.")
-     */
-    protected $captchaCode;
-    /**
-     * @var string le token qui servira lors de l'oubli de mot de passe
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $resetToken;
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $nom;
@@ -72,82 +54,44 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $prenom;
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Partie", mappedBy="j1_partie")
-     */
-    private $partiej1;
-    /**
-     * @return mixed
-     */
-    public function getPartiej1()
-    {
-        return $this->partiej1;
-    }
-    /**
-     * @param mixed $partiej1
-     */
-    public function setPartiej1($partiej1): void
-    {
-        $this->partiej1 = $partiej1;
-    }
-    /**
-     * @return mixed
-     */
-    public function getPartiej2()
-    {
-        return $this->partiej2;
-    }
-    /**
-     * @param mixed $partiej2
-     */
-    public function setPartiej2($partiej2): void
-    {
-        $this->partiej2 = $partiej2;
-    }
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Partie", mappedBy="j2_partie")
-     */
-    private $partiej2;
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Partie", mappedBy="tour")
-     */
-    private $tour;
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Partie", mappedBy="gagnant_partie")
-     */
-    private $gagnantpartie;
 
     /**
-     * @return mixed
+     * @ORM\ManyToOne(targetEntity="App\Entity\News", inversedBy="author")
      */
-    public function getGagnantpartie()
-    {
-        return $this->gagnantpartie;
-    }
+    private $news;
+
     /**
-     * @param mixed $gagnantpartie
+     * @ORM\ManyToOne(targetEntity="App\Entity\Gif", inversedBy="author")
      */
-    public function setGagnantpartie($gagnantpartie): void
-    {
-        $this->gagnantpartie = $gagnantpartie;
-    }
+    private $gif;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Album", mappedBy="user")
+     */
+    private $albums;
+
     public function __construct()
     {
         $this->tour = new ArrayCollection();
+        $this->albums = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
     public function getEmail(): ?string
     {
         return $this->email;
     }
+
     public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -155,43 +99,44 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
+
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        if ($this->bloquer === false) {
-            if ($this->pseudo === "admin") {
-                $roles[] = 'ROLE_ADMIN';
-            } else {
-                // guarantee every user at least has ROLE_USER
-                $roles[] = 'ROLE_USER';
-            }
-        } elseif ($this->bloquer === true) {
-            throw new CustomUserMessageAuthenticationException('Votre compte a été bloqué par l\'administrateur !');
+        if ($this->pseudo === "admin") {
+            $roles[] = 'ROLE_ADMIN';
+        } else {
+            // guarantee every user at least has ROLE_USER
+            $roles[] = 'ROLE_USER';
         }
         return array_unique($roles);
     }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
         return $this;
     }
+
     /**
      * @see UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
+
     public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
     }
+
     /**
      * @see UserInterface
      */
@@ -199,6 +144,7 @@ class User implements UserInterface
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
+
     /**
      * @see UserInterface
      */
@@ -207,106 +153,102 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
     public function getPseudo(): ?string
     {
         return $this->pseudo;
     }
+
     public function setPseudo(string $pseudo): self
     {
         $this->pseudo = $pseudo;
         return $this;
     }
+
     public function getDateinscription(): ?\DateTimeInterface
     {
         return $this->dateinscription;
     }
+
     public function setDateinscription(\DateTimeInterface $dateinscription): self
     {
         $this->dateinscription = $dateinscription;
         return $this;
     }
-    public function getDerniereco(): ?\DateTimeInterface
-    {
-        return $this->derniereco;
-    }
-    public function setDerniereco(\DateTimeInterface $derniereco): self
-    {
-        $this->derniereco = $derniereco;
-        return $this;
-    }
-    public function getBloquer(): ?bool
-    {
-        return $this->bloquer;
-    }
-    public function setBloquer(bool $bloquer): self
-    {
-        $this->bloquer = $bloquer;
-        return $this;
-    }
-    public function getCaptchaCode()
-    {
-        return $this->captchaCode;
-    }
-    public function setCaptchaCode($captchaCode)
-    {
-        $this->captchaCode = $captchaCode;
-    }
-    /**
-     * @return string
-     */
-    public function getResetToken()
-    {
-        return $this->resetToken;
-    }
-    /**
-     * @param string $resetToken
-     */
-    public function setResetToken(?string $resetToken): void
-    {
-        $this->resetToken = $resetToken;
-    }
     public function getNom(): ?string
     {
         return $this->nom;
     }
+
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
         return $this;
     }
+
     public function getPrenom(): ?string
     {
         return $this->prenom;
     }
+
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
         return $this;
     }
-    /**
-     * @return Collection|Partie[]
-     */
-    public function getTour(): Collection
+
+    public function getNews(): ?News
     {
-        return $this->tour;
+        return $this->news;
     }
-    public function addTour(Partie $tour): self
+
+    public function setNews(?News $news): self
     {
-        if (!$this->tour->contains($tour)) {
-            $this->tour[] = $tour;
-            $tour->setTour($this);
-        }
+        $this->news = $news;
+
         return $this;
     }
-    public function removeTour(Partie $tour): self
+
+    public function getGif(): ?Gif
     {
-        if ($this->tour->contains($tour)) {
-            $this->tour->removeElement($tour);
+        return $this->gif;
+    }
+
+    public function setGif(?Gif $gif): self
+    {
+        $this->gif = $gif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Album[]
+     */
+    public function getAlbums(): Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): self
+    {
+        if (!$this->albums->contains($album)) {
+            $this->albums[] = $album;
+            $album->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): self
+    {
+        if ($this->albums->contains($album)) {
+            $this->albums->removeElement($album);
             // set the owning side to null (unless already changed)
-            if ($tour->getTour() === $this) {
-                $tour->setTour(null);
+            if ($album->getUser() === $this) {
+                $album->setUser(null);
             }
         }
+
         return $this;
     }
 }
